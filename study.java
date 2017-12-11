@@ -22,7 +22,7 @@ public Class study {
         }
     }
     //this is the part that sends out the packets, which means I need to relearn java networking YAYYYYYY
-    void studyInput(int packetSize) {
+    public static void studyInput(int packetSize) {
         byte[] sendData = new byte[packetSize];
         byte[] relevantBytes = new byte[16];
         byte[] receive = new byte[1024];
@@ -39,11 +39,36 @@ public Class study {
             DatagramPacket pack = new DatagramPacket(sendData, sendData.length, local, 1000);
             sock.send(pack);
             DatagramPacket inpack = new DatagramPacket(receive, receive.length);
-            sock.receive(inpack);
-            String 
+            
             //listen for packet here
+            sock.receive(inpack);
+            String fromServer = new String(inpack.data());
+            System.out.println(fromServer);
+            return;
         }
 
     }
 
+    public static void main(String[] args) {
+        studyInput(400);
+    }
+
+    public static void printPatterns () {
+        double timeaverage = totalTime/totalPackets;
+        double[][] avgtimebybyte  = new double[16][256];
+        double[][] deviationbybyte = new double[16][256];
+
+        for(int i =0; i<16; i++) {
+            for (int j =0; j<256; j++) {
+                avgtimebybyte [i][j] = timeByByte[i][j]/packetNumByByte[i][j];
+                deviationbybyte [i][j] = timeSquaredByByte[i][j] / packetNumByByte[i][j];
+                deviationbybyte[i][j] -=  avgtimebybyte [i][j] * avgtimebybyte [i][j];
+                deviationbybyte[i][j] = Math.sqrt(deviationbybyte[i][j]);         
+            }
+        }
+
+        for(int i =0; i<16; i++) {
+            for (int j =0; j<256; j++) {
+                System.out.printf()
+    }
 }
