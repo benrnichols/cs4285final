@@ -2,12 +2,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <openssl/aes.h>
-unsigned int timestamp(void)
+#include <sys/time.h>
+
+void timestamp(struct timeval var)
 {
-	unsigned int bottom;
-	unsigned int top;
-	asm volatile(".byte15;.byte49" : "=a"(bottom),"=d"(top));
-	return bottom;
+	gettimeofday(&var, NULL);
 }
 
 unsigned char key[16];
@@ -23,8 +22,8 @@ void handle(char out[40],char in[],int len)
 	{
 		out[i] = 0;
 	}
-
-	*(unsigned int *) (out+ 32) = timestamp();
+	struct timeval start;
+	 timestamp(start);
 
 	if (len < 16) return;
 	for (i = 0;i < 16;++i)
@@ -43,7 +42,10 @@ void handle(char out[40],char in[],int len)
 	{
 		out[16+ i] = scrambledzero[i];
 	}
-	*(unsigned int *) (out + 36) = timestamp();
+	struct timeval stop;
+	timestamp(stop);
+
+	*(unsigned int *) (out +32) = stop.tv_usec - start.tv_usec;
 }
 
 
