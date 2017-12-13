@@ -1,6 +1,6 @@
 import java.net.*;
 import java.lang.Math;
-public Class study {
+public class study {
     static long totalPackets = 0;
     static double totalTime= 0;
     static double[][] timeByByte = new double[16][256];
@@ -28,22 +28,24 @@ public Class study {
         byte[] receive = new byte[1024];
         while(true) {
             for (int index =0; index< packetSize; index++) {
-                sendData[index] = (byte) (Math.random()* 256) - 128; 
+                sendData[index] = (byte) ((Math.random()* 256) - 128); 
                 if(index < 16) {
                     relevantBytes[index] = sendData[index];
                 }
             }
+		try{
             //send packet here
             InetAddress local = InetAddress.getByName("127.0.0.1");
             DatagramSocket sock = new DatagramSocket();
-            DatagramPacket pack = new DatagramPacket(sendData, sendData.length, local, 1000);
+            DatagramPacket pack = new DatagramPacket(sendData, sendData.length, local, 10000);
             sock.send(pack);
             DatagramPacket inpack = new DatagramPacket(receive, receive.length);
             
             //listen for packet here
             sock.receive(inpack);
-            String fromServer = new String(inpack.data());
+            String fromServer = new String(inpack.getData());
             System.out.println(fromServer);
+		} catch (Exception e) {}
             return;
         }
 
@@ -69,6 +71,6 @@ public Class study {
 
         for(int i =0; i<16; i++) {
             for (int j =0; j<256; j++) {
-                System.out.printf()
     }
 }
+}}
